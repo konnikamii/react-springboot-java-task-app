@@ -123,7 +123,7 @@ You could simply use `mvn` if you have it already installed.
 #### 4. Run the project: (only if running locally)
 
 ```bash
-java -jar target/task-manager-0.0.1-SNAPSHOT.jar
+java -jar target/app-0.0.1-SNAPSHOT.jar
 ```
 
 ## Frontend Setup
