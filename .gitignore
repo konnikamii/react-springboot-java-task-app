@@ -30,4 +30,4 @@ logs
 vite.config.*.timestamp-*
 
 .vscode
- 
+.idea

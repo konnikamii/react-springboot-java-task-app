@@ -25,10 +25,10 @@ public class UserService {
     @Autowired
     private JwtService jwtService;
 
-
     // DTO = Data Transfer Object
     private UserDTO convertToDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getUpdatedAt(), user.getCreatedAt());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getUpdatedAt(),
+                user.getCreatedAt());
     }
 
     private List<UserDTO> convertToDTOList(List<User> users) {
@@ -40,21 +40,25 @@ public class UserService {
     private UserTasksDTO convertToUserTasksDTO(User user) {
         List<Task> tasks = taskService.getAllTasksByOwnerId(user.getId());
         List<TaskDTO> tasksDTO = taskService.convertToDTOList(tasks);
-        return new UserTasksDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getUpdatedAt(), user.getCreatedAt(), tasksDTO);
+        return new UserTasksDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getUpdatedAt(),
+                user.getCreatedAt(), tasksDTO);
     }
 
     private List<UserTasksDTO> convertToUserTasksDTOList(List<User> users) {
-        return userRepository.findAll().stream().map(this::convertToUserTasksDTO).collect(java.util.stream.Collectors.toList());
+        return userRepository.findAll().stream().map(this::convertToUserTasksDTO)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     // Internal
     public User getUserByToken(String token) {
         String username = jwtService.extractUsername(token.substring(7));
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     public List<User> getAllUsers() {
@@ -87,9 +91,6 @@ public class UserService {
 
     public void changePassword(String username, String oldPassword, String newPassword) {
         User user = getUserByUsername(username);
-        System.out.println(passwordEncoder.encode(oldPassword));
-        System.out.println(oldPassword);
-        System.out.println(user.getPassword());
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
         } else {
